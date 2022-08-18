@@ -3,6 +3,8 @@
 #include <QTextStream>
 #include <iostream>
 #include <QFileDialog>
+#include <QDebug>
+#include <QLineEdit>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
@@ -22,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->removeSelectionButton, &QPushButton::clicked, this, &MainWindow::removeSelection);
     connect(ui->newTableButton, &QPushButton::clicked, this, &MainWindow::newTable);
     setNoTableButtonsDisabled();
+
 }
 
 void MainWindow::setNoTableButtonsDisabled(bool val) {
@@ -61,21 +64,36 @@ void MainWindow::loadTable() {
     }
     ui->phoneNumbers->setModel(&model);
     setNoTableButtonsDisabled(false);
+    currentTablePath = path;
+}
+
+bool MainWindow::tableModelExists() {
+    return ui->phoneNumbers->model() != nullptr;
 }
 
 void MainWindow::removeSelection() {
+    if (!tableModelExists())
+        return;
     QItemSelectionModel &select = *ui->phoneNumbers->selectionModel();
     if (select.hasSelection()) {
         auto selectedRows = select.selectedRows();
+        QList<int> rowIndexes;
         for (auto &row : selectedRows) {
-            ui->phoneNumbers->model()->removeRow(row.row());
+            rowIndexes << row.row();
         }
+        auto cmp = [](int a, int b) {
+            return a > b;
+        };
+        sort(rowIndexes.begin(), rowIndexes.end(), cmp);
+        for (auto &i : rowIndexes)
+            ui->phoneNumbers->model()->removeRow(i);
     }
 }
 
 void MainWindow::closeTable() {
     ui->phoneNumbers->setModel(nullptr);
     setNoTableButtonsDisabled();
+    currentTablePath = nullptr;
 }
 
 void MainWindow::newTable() {
@@ -93,6 +111,23 @@ void MainWindow::newTable() {
 }
 
 void MainWindow::saveTable() {
+    if (currentTablePath == nullptr) {
+        QFileDialog objFlDlg(this);
+        objFlDlg.setOption(QFileDialog::ShowDirsOnly, true);
+        objFlDlg.setAcceptMode(QFileDialog::AcceptSave);
+        objFlDlg.selectFile("myPhones.csv");
+        QList<QLineEdit *> lst = objFlDlg.findChildren<QLineEdit *>();
+        qDebug() << lst.count();
+        if (lst.count() == 1) {
+            lst.at(0)->setReadOnly(true);
+        } else {
+        }
+        if (objFlDlg.exec()) {
+            currentTablePath = objFlDlg.selectedFiles().at(0);
+        }
+    }
+    if (currentTablePath == nullptr)
+        return;
     QString textData;
     auto *model = ui->phoneNumbers->model();
     int rows = model->rowCount();
@@ -111,7 +146,7 @@ void MainWindow::saveTable() {
         }
         textData += "\n";             // (optional: for new line segmentation)
     }
-    QFile csvFile("./phones.csv");
+    QFile csvFile(currentTablePath);
     if (csvFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QTextStream out(&csvFile);
         out << textData;
@@ -122,8 +157,13 @@ void MainWindow::saveTable() {
 
 void MainWindow::addRow() {
     cout << "adding row" << endl;
-    auto &model = *ui->phoneNumbers->model();
+    auto &model = (QStandardItemModel &) *ui->phoneNumbers->model();
     QItemSelectionModel &select = *ui->phoneNumbers->selectionModel();
+    auto id = new QStandardItem("-1");
+    auto name = new QStandardItem("Name");
+    auto tel = new QStandardItem("0");
+    QList<QStandardItem *> items;
+    items << id << name << tel;
     if (select.hasSelection()) {
         int maxSelectedRow = -1;
         auto selectedRows = select.selectedRows();
@@ -131,9 +171,10 @@ void MainWindow::addRow() {
             if (row.row() > maxSelectedRow)
                 maxSelectedRow = row.row();
         }
-        model.insertRow(maxSelectedRow + 1);
-    } else
-        model.insertRow(model.rowCount(QModelIndex()));
+        model.insertRow(maxSelectedRow + 1, items);
+    } else {
+        model.insertRow(model.rowCount(QModelIndex()), items);
+    }
 }
 
 MainWindow::~MainWindow() {

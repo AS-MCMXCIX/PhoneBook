@@ -11,9 +11,9 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
 
-    ~MainWindow();
+    ~MainWindow() override;
 
 public slots:
 
@@ -31,9 +31,11 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+    QString currentTablePath = nullptr;
 
+    void setNoTableButtonsDisabled(bool val = true);
 
-    void setNoTableButtonsDisabled(bool val=true);
+    bool tableModelExists();
 };
 
 #endif // MAINWINDOW_H
