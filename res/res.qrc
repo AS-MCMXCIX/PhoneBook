@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>styles/exitDialog.qss</file>
+        <file>styles/main.qss</file>
+        <file>styles/scrollbar.qss</file>
+        <file>styles/table.qss</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>fonts/Orbitron-ExtraBold.ttf</file>
+        <file>fonts/Orbitron-SemiBold.ttf</file>
+        <file>fonts/Orbitron-Regular.ttf</file>
+        <file>fonts/Orbitron-Medium.ttf</file>
+        <file>fonts/Orbitron-Black.ttf</file>
+        <file>fonts/Orbitron-Bold.ttf</file>
+    </qresource>
+</RCC>

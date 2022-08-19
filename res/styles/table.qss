@@ -1,0 +1,20 @@
+QTableView {
+    color:#7cff54;
+    border: 1px solid #7cff54;
+    background-color: #243137;
+    selection-background-color: #7cff54;
+    selection-color: black;
+}
+
+QTableView::item:focus {
+    selection-background-color: #7cff54;
+    selection-color: black;
+}
+QTableView QTableCornerButton::section{
+    background-color: royalblue;
+}
+QTableView QHeaderView::section{
+    color:#7cff54;
+    background-color: black;
+    border: 1px solid #7cff54;
+}

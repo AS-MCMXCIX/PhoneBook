@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
+    <width>706</width>
     <height>358</height>
    </rect>
   </property>
@@ -89,24 +89,13 @@ QPushButton:disabled {
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTableView {
-	color:#7cff54;
-	font-family: orbitron;
-	border: 1px solid #7cff54;
-	selection-background-color: #7cff54;
-	selection-color: black;
-}
-
-QTableView::item:focus {
-	selection-background-color: #7cff54;
-	selection-color: black;
-}
-
-QHeaderView::section{
-	color:#7cff54;
-	font-family:orbitron;
-	border: 1px solid #7cff54;
-}</string>
+       <string notr="true"/>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="autoScrollMargin">
+       <number>16</number>
       </property>
      </widget>
     </item>
@@ -143,9 +132,7 @@ QHeaderView::section{
     <item row="0" column="0">
      <widget class="QPushButton" name="addRowButton">
       <property name="styleSheet">
-       <string notr="true">
-
-</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Add Row</string>
@@ -159,7 +146,7 @@ QHeaderView::section{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>530</width>
+     <width>706</width>
      <height>24</height>
     </rect>
    </property>

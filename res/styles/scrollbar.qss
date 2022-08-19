@@ -1,0 +1,38 @@
+
+QTableView QScrollBar:vertical {
+    border-color: #7cff54;
+    border-width: 0 1px 0 1px;
+    border-style: solid;
+
+    background-color: #32454f;
+    width: 10px;
+    /*width: 15px;*/
+    /*margin: 21px 0 21px 0;*/
+}
+
+QTableView QScrollBar::handle:vertical {
+    border-radius: 100px;
+    background-color: dodgerblue;
+    border: 0px solid red;
+}
+
+QTableView QScrollBar::handle:vertical:pressed {
+    background-color: red;
+    min-height: 25px;
+
+}
+
+/*QScrollBar::add-line:vertical {*/
+/*    border: 1px solid grey;*/
+/*    background-color: blue;*/
+/*}*/
+
+/*QScrollBar::sub-line:vertical {*/
+/*    border: 1px solid grey;*/
+/*    background-color: blue;*/
+/*}*/
+
+
+/*QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {*/
+    /*background: none;*/
+/*}*/

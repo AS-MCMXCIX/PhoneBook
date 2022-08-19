@@ -1,0 +1,53 @@
+QMessageBox {
+    background-color: #333333;
+    messagebox-text-interaction-flags: 0;
+}
+
+QMessageBox QLabel {
+    font-family: Orbitron;
+    color: #7cff54;
+    font-size: 16px;
+}
+
+#qt_msgbox_informativelabel {
+    color: #7cff54;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+QMessageBox QPushButton {
+    font-family: Orbitron, serif;
+    color: #7cff54;
+    border: 1px solid #7cff54;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 6px;
+    margin-top: 20px;
+}
+
+
+QMessageBox QPushButton:hover {
+    color: black;
+    background-color: #7cff54;
+}
+
+QMessageBox QPushButton:default {
+    background-color: #7cff54;
+    color: black;
+}
+
+QMessageBox QPushButton:default:hover {
+    background-color: #34c608;
+    border-color: #34c608;
+    color: black;
+}
+
+QMessageBox QPushButton[text="Cancel"] {
+    color: white;
+    background-color: #ff5252;
+    border-color: #ff5252;
+}
+
+QMessageBox QPushButton:hover[text="Cancel"] {
+    background-color: #d02f2f;
+}

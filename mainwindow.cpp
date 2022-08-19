@@ -4,8 +4,12 @@
 #include <iostream>
 #include <QFileDialog>
 #include <QDebug>
+#include <QScrollBar>
 #include <QLineEdit>
+#include <QCloseEvent>
+#include <QMessageBox>
 #include "mainwindow.h"
+#include "Loader.h"
 #include "./ui_mainwindow.h"
 
 #define print(string) cout << string <<endl
@@ -17,17 +21,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->phoneNumbers->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
     ui->phoneNumbers->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::saveTable);
-    connect(ui->addRowButton, &QPushButton::clicked, this, &MainWindow::addRow);
-    connect(ui->loadDataButton, &QPushButton::clicked, this, &MainWindow::loadTable);
-    connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::closeTable);
     connect(ui->removeSelectionButton, &QPushButton::clicked, this, &MainWindow::removeSelection);
     connect(ui->newTableButton, &QPushButton::clicked, this, &MainWindow::newTable);
-    setNoTableButtonsDisabled();
-
+    connect(ui->loadDataButton, &QPushButton::clicked, this, &MainWindow::loadTable);
+    connect(ui->addRowButton, &QPushButton::clicked, this, &MainWindow::addRow);
+    connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::closeTable);
+    connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::saveTable);
+    disableTableButtons();
+    ui->phoneNumbers->setStyleSheet(Loader::loadQSS(":styles/table.qss"));
+    ui->phoneNumbers->verticalScrollBar()->setStyleSheet(Loader::loadQSS(":styles/scrollbar.qss"));
 }
 
-void MainWindow::setNoTableButtonsDisabled(bool val) {
+void MainWindow::disableTableButtons(bool val) {
     ui->saveButton->setDisabled(val);
     ui->addRowButton->setDisabled(val);
     ui->removeSelectionButton->setDisabled(val);
@@ -63,7 +68,7 @@ void MainWindow::loadTable() {
         file.close();
     }
     ui->phoneNumbers->setModel(&model);
-    setNoTableButtonsDisabled(false);
+    disableTableButtons(false);
     currentTablePath = path;
 }
 
@@ -92,7 +97,7 @@ void MainWindow::removeSelection() {
 
 void MainWindow::closeTable() {
     ui->phoneNumbers->setModel(nullptr);
-    setNoTableButtonsDisabled();
+    disableTableButtons();
     currentTablePath = nullptr;
 }
 
@@ -107,7 +112,7 @@ void MainWindow::newTable() {
         model.setHorizontalHeaderItem(j, item);
     }
     ui->phoneNumbers->setModel(&model);
-    setNoTableButtonsDisabled(false);
+    disableTableButtons(false);
 }
 
 void MainWindow::saveTable() {
@@ -153,6 +158,33 @@ void MainWindow::saveTable() {
         csvFile.close();
     }
     cout << "saved successfully" << endl;
+}
+
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    QMessageBox msgBox;
+    int a;
+
+    std::cout << msgBox.styleSheet().toStdString() << std::endl;
+    msgBox.setStyleSheet(Loader::loadQSS(":styles/exitDialog.qss"));
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+        case QMessageBox::Discard:
+            event->accept();
+            break;
+        case QMessageBox::Cancel:
+            event->ignore();
+            break;
+        case QMessageBox::Save:
+            event->accept();
+            break;
+        default:
+            break;
+    }
 }
 
 void MainWindow::addRow() {

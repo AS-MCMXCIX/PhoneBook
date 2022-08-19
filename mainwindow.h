@@ -33,9 +33,11 @@ private:
     Ui::MainWindow *ui;
     QString currentTablePath = nullptr;
 
-    void setNoTableButtonsDisabled(bool val = true);
+    void disableTableButtons(bool val = true);
 
     bool tableModelExists();
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H
