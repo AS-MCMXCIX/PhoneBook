@@ -21,7 +21,7 @@ set(PROJECT_SOURCES
         mainwindow.h
         mainwindow.ui
         savedialog.cpp savedialog.h savedialog.ui
-        Loader.cpp Loader.h)
+        Loader.cpp Loader.h PhoneBookInputValidator.cpp PhoneBookInputValidator.h)
 
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)

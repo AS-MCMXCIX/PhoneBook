@@ -16,6 +16,6 @@ int main(int argc, char *argv[]) {
     QApplication::setFont(font);
     MainWindow w;
     w.show();
-    w.setStyleSheet(Loader::loadQSS(":styles/main.qss"));
+    w.setStyleSheet(Loader::readFileAsQString(":styles/main.qss"));
     return QApplication::exec();
 }
